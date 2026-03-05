@@ -1,0 +1,49 @@
+name: Test Actions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: generate test file
+        run: |
+          echo 'fake confidential data' > foo.yml
+          pwd
+          ls -al
+      - name: Retrieve runner uid and gid
+        id: uid-gid
+        run: |
+          echo "uid=$(id -u)" >> $GITHUB_OUTPUT
+          echo "gid=$(id -g)" >> $GITHUB_OUTPUT
+      - name: encrypt test file
+        uses: ./
+        env:
+          UID: ${{ steps.uid-gid.outputs.uid }}
+          GID: ${{ steps.uid-gid.outputs.gid }}
+        with:
+          vault_key: '1234'
+          command: |
+            ansible-vault encrypt foo.yml
+            chown $UID:$GID foo.yml
+      - name: print encrypted file
+        run: cat foo.yml
+      - name: decrypt test file
+        uses: ./
+        env:
+          UID: ${{ steps.uid-gid.outputs.uid }}
+          GID: ${{ steps.uid-gid.outputs.gid }}
+        with:
+          vault_key: '1234'
+          command: |
+            ansible-vault decrypt foo.yml
+            chown $UID:$GID foo.yml
+      - name: print decrypted file
+        run: cat foo.yml

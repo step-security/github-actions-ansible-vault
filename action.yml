@@ -1,0 +1,18 @@
+name: GitHub Actions Ansible Vault
+author: step-security
+description: Decrypt or encrypt file with Ansible Vault
+branding:
+  icon: lock
+  color: gray-dark
+inputs:
+  command:
+    description: "Command to execute"
+    required: true
+    default: "ansible-vault --version"
+  vault_key:
+    description: "Vault key"
+    required: true
+    default: ""
+runs:
+  using: "docker"
+  image: "Dockerfile"
