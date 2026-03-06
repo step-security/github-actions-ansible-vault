@@ -43,6 +43,7 @@ if [ "$REPO_PRIVATE" != "false" ]; then
 fi
 
 export ANSIBLE_VAULT_PASSWORD_FILE='/.vault_key'
+echo "::add-mask::$INPUT_VAULT_KEY"
 echo $INPUT_VAULT_KEY > $ANSIBLE_VAULT_PASSWORD_FILE
 INPUT_VAULT_KEY='************'
 sh -c "$INPUT_COMMAND"
