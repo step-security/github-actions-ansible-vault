@@ -15,4 +15,4 @@ inputs:
     default: ""
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: "docker://ghcr.io/step-security/github-actions-ansible-vault:v1.0.0@sha256:2d59feb38a0271f3078f44a283c23fa68bf3d497e5c8bdebbbac7eea9ec8ea11" #v1.0.0
